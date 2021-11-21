@@ -1,0 +1,10 @@
+version: "2.4"
+
+services:
+  farm:
+    build: .
+    volumes:
+      - ./server/config.py:/app/server/config.py
+      - ./server/data/:/app/server/data
+    ports:
+      - "5000:5000"
