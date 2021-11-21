@@ -99,3 +99,24 @@ def post_flags_manual():
     db.commit()
 
     return ''
+
+
+@app.route('/ui/get_client')
+@auth.auth_required
+def get_client():
+    from flask import send_file
+    import io
+    import requests
+    with open('../start_sploit.py', 'r') as f:
+        client_file = f.read()
+    config = reloader.get_config()
+    my_ip = requests.get('http://ifconfig.me/').text
+    client_file = client_file.replace('farm.kolambda.com', my_ip)
+    if config['ENABLE_API_AUTH']:
+        token = config['API_TOKEN']
+        client_file = client_file.replace("metavar='TOKEN',", f"metavar='TOKEN', default='{token}'")
+    return send_file(
+        io.BytesIO(client_file.encode()),
+        attachment_filename='start_sploit.py',
+        as_attachment=True,
+    )
