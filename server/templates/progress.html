@@ -2,11 +2,11 @@
     {% with c=counts[sploit] %}
     <div class="col-lg-2">
         {% if sploit == 'Manual' %}
-            <span class="badge badge-warning">{{ sploit }}</span>
+            <span class="badge bg-warning">{{ sploit }}</span>
         {% elif sploit == 'Total' %}
-            <span class="badge badge-success">{{ sploit }}</span>
+            <span class="badge bg-success">{{ sploit }}</span>
         {% else %}
-            <span class="badge badge-primary">{{ sploit|truncate(23, True, '...', 3) }}</span>
+            <span class="badge bg-primary">{{ sploit|truncate(23, True, '...', 3) }}</span>
         {% endif %}
     </div>
     <div class="col-lg-7">
@@ -30,11 +30,11 @@
         </div>
     </div>
     <div class="col-lg-3">
-        <span title="ACCEPTED" class="badge badge-pill badge-primary">{% if c['ACCEPTED'] %}{{ c['ACCEPTED']['count'] }}{% else %}0{% endif %}</span>
-        <span title="REJECTED" class="badge badge-pill badge-danger">{% if c['REJECTED'] %}{{ c['REJECTED']['count'] }}{% else %}0{% endif %}</span>
-        <span title="SKIPPED" class="badge badge-pill badge-secondary">{% if c['SKIPPED'] %}{{ c['SKIPPED']['count'] }}{% else %}0{% endif %}</span>
-        <span title="QUEUED" class="badge badge-pill badge-success">{% if c['QUEUED'] %}{{ c['QUEUED']['count'] }}{% else %}0{% endif %}</span>
-        <span title="TOTAL" class="badge badge-pill badge-info">{% if c['TOTAL'] %}{{ c['TOTAL'] }}{% else %}0{% endif %}</span>
+        <span title="ACCEPTED" class="badge bg-primary">{% if c['ACCEPTED'] %}{{ c['ACCEPTED']['count'] }}{% else %}0{% endif %}</span>
+        <span title="REJECTED" class="badge bg-danger">{% if c['REJECTED'] %}{{ c['REJECTED']['count'] }}{% else %}0{% endif %}</span>
+        <span title="SKIPPED" class="badge bg-secondary">{% if c['SKIPPED'] %}{{ c['SKIPPED']['count'] }}{% else %}0{% endif %}</span>
+        <span title="QUEUED" class="badge bg-success">{% if c['QUEUED'] %}{{ c['QUEUED']['count'] }}{% else %}0{% endif %}</span>
+        <span title="TOTAL" class="badge bg-info">{% if c['TOTAL'] %}{{ c['TOTAL'] }}{% else %}0{% endif %}</span>
     </div>
     {% endwith %}
 </div>
