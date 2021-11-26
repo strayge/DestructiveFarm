@@ -75,6 +75,12 @@ function showFlags() {
         return;
     queryInProgress = true;
 
+    if ($("#show-flags-form :input").filter(function(index, element) {return $(element).val() !== '' && element.id !== 'page-number';}).serialize() === '') {
+        $('.sploit-stats').show();
+    } else {
+        $('.sploit-stats').hide();
+    }
+
     $('.search-results').hide();
     $('.query-status').html('Loading...').show();
 

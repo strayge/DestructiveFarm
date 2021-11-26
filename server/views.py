@@ -28,6 +28,7 @@ def index():
         server_tz_name = 'UTC' + server_tz_name
 
     return render_template('index.html',
+                           counts=get_flag_counts(),
                            flag_format=config['FLAG_FORMAT'],
                            distinct_values=distinct_values,
                            server_tz_name=server_tz_name)
@@ -120,3 +121,23 @@ def get_client():
         attachment_filename='start_sploit.py',
         as_attachment=True,
     )
+
+
+def get_flag_counts():
+    q = database.query('SELECT sploit, status, COUNT(*) as count FROM flags GROUP BY sploit, status')
+    counts = {'Total': {'TOTAL': 0}}
+    for sploit, status, count in q:
+        if sploit not in counts:
+            counts[sploit] = {'TOTAL': 0}
+        counts[sploit]['TOTAL'] += count
+        counts[sploit][status] = {'count': count}
+        if status not in counts['Total']:
+            counts['Total'][status] = {'count': 0}
+        counts['Total'][status]['count'] += count
+        counts['Total']['TOTAL'] += count
+    for sploit in counts:
+        for status in counts[sploit]:
+            if status == 'TOTAL':
+                continue
+            counts[sploit][status]['percent'] = counts[sploit][status]['count'] / counts['Total']['TOTAL'] * 100
+    return dict(sorted(counts.items(), key=lambda x: x[1]['TOTAL'], reverse=True))

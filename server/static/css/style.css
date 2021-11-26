@@ -23,3 +23,12 @@ textarea {
 #text-with-flags {
     height: 80px;
 }
+
+
+#badge-row {
+    align-items: center;
+}
+
+.badge {
+    vertical-align: text-top;
+}
