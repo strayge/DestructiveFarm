@@ -3,8 +3,10 @@ CONFIG = {
 
     # The clients will run sploits on TEAMS and
     # fetch FLAG_FORMAT from sploits' stdout.
-    'TEAMS': {'Team #{}'.format(i): '10.0.0.{}'.format(i)
-              for i in range(1, 29 + 1)},
+    'TEAMS': {
+        'Team #{}'.format(i): '10.0.0.{}'.format(i)
+        for i in range(1, 29 + 1)
+    },
     'FLAG_FORMAT': r'[A-Z0-9]{31}=',
 
     # This configures how and where to submit flags.
@@ -35,9 +37,9 @@ CONFIG = {
 
     # Password for the web interface. You can use it with any login.
     # This value will be excluded from the config before sending it to farm clients.
-    'SERVER_PASSWORD': '1234',
+    'SERVER_PASSWORD': '12345678',
 
     # Use authorization for API requests
-    'ENABLE_API_AUTH': False,
-    'API_TOKEN': '00000000000000000000'
+    'ENABLE_API_AUTH': True,
+    'API_TOKEN': '12345678'
 }
