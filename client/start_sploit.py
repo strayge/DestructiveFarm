@@ -102,6 +102,12 @@ def parse_args():
     parser.add_argument('-v', '--verbose-attacks', metavar='N', type=int, default=1,
                         help="Sploits' outputs and found flags will be shown for the N first attacks")
 
+    parser.add_argument(
+        '--dynamic-teams',
+        action='store_true',
+        help='sploit can switch team for next flags with "SPLOIT_TEAM_<IP>" line',
+    )
+
     group = parser.add_mutually_exclusive_group()
     group.add_argument('--not-per-team', action='store_true',
                        help='Run a single instance of the sploit instead of an instance per team')
@@ -354,10 +360,11 @@ def display_sploit_output(team_name, output_lines):
         print('\n' + '\n'.join(prefix + line.rstrip() for line in output_lines) + '\n')
 
 
-def process_sploit_output(stream, args, team_name, flag_format, attack_no):
+def process_sploit_output(stream, args, team_name, flag_format, attack_no, teams):
     try:
         output_lines = []
         instance_flags = set()
+        team_name_by_ip = {ip: name for name, ip in teams.items()}
 
         while True:
             line = stream.readline()
@@ -365,6 +372,10 @@ def process_sploit_output(stream, args, team_name, flag_format, attack_no):
                 break
             line = line.decode(errors='replace')
             output_lines.append(line)
+
+            if args.dynamic_teams and line.startswith('SPLOIT_TEAM_'):
+                ip = line[12:].strip()
+                team_name = team_name_by_ip.get(ip, '*')
 
             line_flags = set(flag_format.findall(line))
             if line_flags:
@@ -414,7 +425,7 @@ instance_storage = InstanceStorage()
 instance_lock = threading.RLock()
 
 
-def launch_sploit(args, team_name, team_addr, attack_no, flag_format):
+def launch_sploit(args, team_name, team_addr, attack_no, flag_format, teams):
     # For sploits written in Python, this env variable forces the interpreter to flush
     # stdout and stderr after each newline. Note that this is not default behavior
     # if the sploit's output is redirected to a pipe.
@@ -440,18 +451,18 @@ def launch_sploit(args, team_name, team_addr, attack_no, flag_format):
         kernel32.SetConsoleCtrlHandler(win_ignore_ctrl_c, False)
 
     threading.Thread(target=lambda: process_sploit_output(
-        proc.stdout, args, team_name, flag_format, attack_no)).start()
+        proc.stdout, args, team_name, flag_format, attack_no, teams)).start()
 
     return proc, instance_storage.register_start(proc)
 
 
-def run_sploit(args, team_name, team_addr, attack_no, max_runtime, flag_format):
+def run_sploit(args, team_name, team_addr, attack_no, max_runtime, flag_format, teams):
     try:
         with instance_lock:
             if exit_event.is_set():
                 return
 
-            proc, instance_id = launch_sploit(args, team_name, team_addr, attack_no, flag_format)
+            proc, instance_id = launch_sploit(args, team_name, team_addr, attack_no, flag_format, teams)
     except Exception as e:
         if isinstance(e, FileNotFoundError):
             logging.error('Sploit file or the interpreter for it not found: {}'.format(repr(e)))
@@ -559,7 +570,7 @@ def main(args):
         show_time_limit_info(args, config, max_runtime, attack_no)
 
         for team_name, team_addr in teams.items():
-            pool.submit(run_sploit, args, team_name, team_addr, attack_no, max_runtime, flag_format)
+            pool.submit(run_sploit, args, team_name, team_addr, attack_no, max_runtime, flag_format, config['TEAMS'])
 
 
 def shutdown():
