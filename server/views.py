@@ -55,6 +55,10 @@ def show_flags():
             timestamp = round(datetime.strptime(value, FORM_DATETIME_FORMAT).timestamp())
             sign = '>=' if param == 'time-since' else '<='
             conditions.append(('time {} ?'.format(sign), timestamp))
+    if request.form.get('time-ago'):
+        value = int(request.form['time-ago'])
+        now = int(time.time())
+        conditions.append((f'time >= ?', now - 60 * value))
     page_number = int(request.form['page-number'])
     if page_number < 1:
         raise ValueError('Invalid page-number')
