@@ -1,40 +1,48 @@
-<div class="row" id="badge-row">
-    {% with c=counts[sploit] %}
-    <div class="col-lg-2">
-        {% if sploit == 'Manual' %}
-            <span class="badge bg-warning">{{ sploit }}</span>
-        {% elif sploit == 'Total' %}
-            <span class="badge bg-success">{{ sploit }}</span>
-        {% else %}
-            <span class="badge bg-primary">{{ sploit|truncate(23, True, '...', 3) }}</span>
-        {% endif %}
-    </div>
-    <div class="col-lg-7">
-        <div class="progress">
-          {% if c['ACCEPTED'] %}
-              <div title="ACCEPTED" class="progress-bar bg-primary" role="progressbar"
-                style="width: {{ c['ACCEPTED']['percent'] }}%"></div>
-          {% endif %}
-          {% if c['REJECTED'] %}
-              <div title="REJECTED" class="progress-bar bg-danger" role="progressbar"
-                style="width: {{ c['REJECTED']['percent'] }}%"></div>
-          {% endif %}
-          {% if c['SKIPPED'] %}
-              <div title="SKIPPED" class="progress-bar bg-secondary" role="progressbar"
-                style="width: {{ c['SKIPPED']['percent'] }}%"></div>
-          {% endif %}
-          {% if c['QUEUED'] %}
-              <div title="QUEUED" class="progress-bar bg-success" role="progressbar"
-                style="width: {{ c['QUEUED']['percent'] }}%"></div>
-          {% endif %}
+<div class="col-lg-12">
+    <div class="card border-light">
+        <div class="card-body">
+            {% for sploit in counts %}
+                <div class="row" id="badge-row">
+                    {% with c=counts[sploit] %}
+                    <div class="col-lg-2">
+                        {% if sploit == 'Manual' %}
+                            <span class="badge bg-warning">{{ sploit }}</span>
+                        {% elif sploit == 'Total' %}
+                            <span class="badge bg-success">{{ sploit }}</span>
+                        {% else %}
+                            <span class="badge bg-primary">{{ sploit|truncate(23, True, '...', 3) }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="progress">
+                          {% if c['ACCEPTED'] %}
+                              <div title="ACCEPTED" class="progress-bar bg-primary" role="progressbar"
+                                style="width: {{ c['ACCEPTED']['percent'] }}%"></div>
+                          {% endif %}
+                          {% if c['REJECTED'] %}
+                              <div title="REJECTED" class="progress-bar bg-danger" role="progressbar"
+                                style="width: {{ c['REJECTED']['percent'] }}%"></div>
+                          {% endif %}
+                          {% if c['SKIPPED'] %}
+                              <div title="SKIPPED" class="progress-bar bg-secondary" role="progressbar"
+                                style="width: {{ c['SKIPPED']['percent'] }}%"></div>
+                          {% endif %}
+                          {% if c['QUEUED'] %}
+                              <div title="QUEUED" class="progress-bar bg-success" role="progressbar"
+                                style="width: {{ c['QUEUED']['percent'] }}%"></div>
+                          {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <span title="ACCEPTED" class="badge bg-primary">{% if c['ACCEPTED'] %}{{ c['ACCEPTED']['count'] }}{% else %}0{% endif %}</span>
+                        <span title="REJECTED" class="badge bg-danger">{% if c['REJECTED'] %}{{ c['REJECTED']['count'] }}{% else %}0{% endif %}</span>
+                        <span title="SKIPPED" class="badge bg-secondary">{% if c['SKIPPED'] %}{{ c['SKIPPED']['count'] }}{% else %}0{% endif %}</span>
+                        <span title="QUEUED" class="badge bg-success">{% if c['QUEUED'] %}{{ c['QUEUED']['count'] }}{% else %}0{% endif %}</span>
+                        <span title="TOTAL" class="badge bg-info">{% if c['TOTAL'] %}{{ c['TOTAL'] }}{% else %}0{% endif %}</span>
+                    </div>
+                    {% endwith %}
+                </div>
+            {% endfor %}
         </div>
     </div>
-    <div class="col-lg-3">
-        <span title="ACCEPTED" class="badge bg-primary">{% if c['ACCEPTED'] %}{{ c['ACCEPTED']['count'] }}{% else %}0{% endif %}</span>
-        <span title="REJECTED" class="badge bg-danger">{% if c['REJECTED'] %}{{ c['REJECTED']['count'] }}{% else %}0{% endif %}</span>
-        <span title="SKIPPED" class="badge bg-secondary">{% if c['SKIPPED'] %}{{ c['SKIPPED']['count'] }}{% else %}0{% endif %}</span>
-        <span title="QUEUED" class="badge bg-success">{% if c['QUEUED'] %}{{ c['QUEUED']['count'] }}{% else %}0{% endif %}</span>
-        <span title="TOTAL" class="badge bg-info">{% if c['TOTAL'] %}{{ c['TOTAL'] }}{% else %}0{% endif %}</span>
-    </div>
-    {% endwith %}
 </div>
