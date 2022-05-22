@@ -123,7 +123,7 @@ def get_client():
     client_file = client_file.replace('farm.kolambda.com', my_ip)
     if config['ENABLE_API_AUTH']:
         token = config['API_TOKEN']
-        client_file = client_file.replace("metavar='TOKEN',", f"metavar='TOKEN', default='{token}'")
+        client_file = client_file.replace("metavar='TOKEN',", f"metavar='TOKEN', default='{token}',")
     return send_file(
         io.BytesIO(client_file.encode()),
         attachment_filename='start_sploit.py',
