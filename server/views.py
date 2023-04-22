@@ -126,7 +126,7 @@ def get_client():
         client_file = client_file.replace("metavar='TOKEN',", f"metavar='TOKEN', default='{token}',")
     return send_file(
         io.BytesIO(client_file.encode()),
-        attachment_filename='start_sploit.py',
+        download_name='start_sploit.py',
         as_attachment=True,
     )
 
